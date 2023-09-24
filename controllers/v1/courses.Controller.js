@@ -27,18 +27,38 @@ module.exports.create = async (req, res) => {
 };
 
 module.exports.getOne = async (req, res) => {
-  const course = await courseModel.findOne({ href: req.params.href }).populate("creator", "-password").populate("categorieID");
+  const course = await courseModel.findOne({ href: req.params.href }).populate("creator", "-password").populate("categorieID").lean();
 
   const sessions = await sessionModel.find({ courseID: course._id });
   const courseStudentsCount = await courseUserModel.find({ courseID: course._id }).count();
-  const comments = await commentModel.find({ courseID: course._id, isAccept: 1 }).populate("creator", "-password");
+  const comments = await commentModel
+    .find({ courseID: course._id, isAccept: 1 })
+    .populate("creator", "-password")
+    .populate("courseID")
+    .lean();
 
   const isUserRegisterToThisCourse = !!(await courseUserModel.findOne({
     user: req.user._id,
     courseID: course._id,
   }));
 
-  res.json({ course, sessions, comments, courseStudentsCount, isUserRegisterToThisCourse });
+  let allComments = [];
+
+  comments.forEach((comment) => {
+    comments.forEach((answerComment) => {
+      if (String(comment._id) === String(answerComment.mainCommentID)) {
+        allComments.push({
+          ...comment,
+          answerComment: {
+            body: answerComment.body,
+            creator: answerComment.creator.username,
+          },
+        });
+      }
+    });
+  });
+
+  res.json({ course, sessions, comments: allComments, courseStudentsCount, isUserRegisterToThisCourse });
 };
 
 module.exports.remove = async (req, res) => {
