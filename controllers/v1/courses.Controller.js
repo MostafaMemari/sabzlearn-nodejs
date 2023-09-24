@@ -153,3 +153,19 @@ module.exports.getRelated = async (req, res) => {
 
   return res.json(relatedCourses);
 };
+
+module.exports.popular = async (req, res) => {
+  const courses = await courseModel.find({}).lean();
+
+  let countCommentByCourse = [];
+
+  courses.forEach(async (course) => {
+    const countComment = await commentModel.find({ courseID: course._id }).lean();
+    countCommentByCourse.push({
+      course: course.name,
+      count: countComment.length,
+    });
+  });
+
+  res.status(200).json(countCommentByCourse);
+};

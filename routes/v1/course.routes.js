@@ -27,6 +27,8 @@ courseRouter.route("/:id").delete(authMiddleware, coursesController.remove);
 
 courseRouter.route("/related/:href").get(coursesController.getRelated);
 
+courseRouter.route("/popular").get(coursesController.popular);
+
 courseRouter.route("/categorie/:href").get(coursesController.getCoursesByCaregory);
 
 courseRouter.route("/sessions").get(authMiddleware, isAdminMiddleware, coursesController.getAllSessions);
