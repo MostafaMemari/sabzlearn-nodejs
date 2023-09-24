@@ -64,3 +64,26 @@ module.exports.reject = async (req, res) => {
   }
   return res.json({ message: "comment rejected successfully" });
 };
+
+module.exports.answer = async (req, res) => {
+  const { body } = req.body;
+
+  const acceptedComment = await commentModel.findByIdAndUpdate({ _id: req.params.id }, { isAccept: 1 });
+
+  if (!acceptedComment) {
+    return res.status(404).json({
+      message: "comment not found !",
+    });
+  }
+
+  const answerComment = await commentModel.create({
+    body,
+    courseID: acceptedComment.courseID,
+    creator: req.user._id,
+    isAnswer: 1,
+    isAccept: 1,
+    mainCommentID: req.params.id,
+  });
+
+  return res.status(201).json(answerComment);
+};

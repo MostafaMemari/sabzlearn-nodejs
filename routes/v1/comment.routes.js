@@ -12,4 +12,6 @@ commentsRouter.route("/:id").delete(authMiddleware, isAdminMiddleware, conmmentC
 commentsRouter.route("/:id/accept").put(authMiddleware, isAdminMiddleware, conmmentController.remove);
 commentsRouter.route("/:id/reject").put(authMiddleware, isAdminMiddleware, conmmentController.reject);
 
+commentsRouter.route("/:id/answer").post(authMiddleware, isAdminMiddleware, conmmentController.answer);
+
 module.exports = commentsRouter;
