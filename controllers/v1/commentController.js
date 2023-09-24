@@ -29,3 +29,38 @@ module.exports.remove = async (req, res) => {
 
   return res.json(deletedComment);
 };
+
+module.exports.remove = async (req, res) => {
+  const acceptedComment = await commentModel.findOneAndUpdate(
+    {
+      _id: req.params.id,
+    },
+    {
+      isAccept: 1,
+    }
+  );
+
+  if (!acceptedComment) {
+    return res.status(404).json({
+      message: "comment not found !!",
+    });
+  }
+  return res.json({ message: "comment accepted successfully" });
+};
+module.exports.reject = async (req, res) => {
+  const rejectedComment = await commentModel.findOneAndUpdate(
+    {
+      _id: req.params.id,
+    },
+    {
+      isAccept: 0,
+    }
+  );
+
+  if (!rejectedComment) {
+    return res.status(404).json({
+      message: "comment not found !!",
+    });
+  }
+  return res.json({ message: "comment rejected successfully" });
+};

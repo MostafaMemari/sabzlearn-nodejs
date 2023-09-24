@@ -22,6 +22,7 @@ courseRouter.route("/:id/sessions").post(
   isAdminMiddleware,
   coursesController.createSession
 );
+courseRouter.route("/:href").get(authMiddleware, coursesController.getOne);
 
 courseRouter.route("/:id").delete(authMiddleware, coursesController.remove);
 
