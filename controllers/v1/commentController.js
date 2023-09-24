@@ -17,6 +17,11 @@ module.exports.create = async (req, res) => {
 
   return res.status(200).json(comment);
 };
+module.exports.getAll = async (req, res) => {
+  const comments = await commentModel.find({}).populate("courseID").populate("creator", "-password").lean();
+
+  return res.json(comments);
+};
 
 module.exports.remove = async (req, res) => {
   const deletedComment = await commentModel.findOneAndRemove({ _id: req.params.id });
