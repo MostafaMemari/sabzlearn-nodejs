@@ -1,3 +1,4 @@
+const nodemailer = require("nodemailer");
 const contactModel = require("../../models/contactModel");
 
 module.exports.getAll = async (req, res) => {
@@ -26,4 +27,32 @@ module.exports.remove = async (req, res) => {
 
   return res.json(deletedContact);
 };
-module.exports.answer = async (req, res) => {};
+module.exports.answer = async (req, res) => {
+  let transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "daneshnext@gmail.com",
+      pass: "sjch cswn egop oltw",
+    },
+  });
+  const mailOptions = {
+    form: "daneshnext@gmail.com",
+    to: req.body.email,
+    subject: "پاسخ پیغام شما از سمت آکادمی سبز لرن",
+    text: req.body.answer,
+  };
+
+  transporter.sendMail(mailOptions, async (error, info) => {
+    if (error) {
+      return res.json({ message: error });
+    } else {
+      const contact = await contactModel.findOneAndUpdate(
+        { email: req.body.email },
+        {
+          answer: 1,
+        }
+      );
+      return res.json({ message: "Email Send Successfully :))" });
+    }
+  });
+};
