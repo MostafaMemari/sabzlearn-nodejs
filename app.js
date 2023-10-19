@@ -8,6 +8,8 @@ const categorieRouter = require("./routes/v1/categorie.routes");
 const coursesRouter = require("./routes/v1/course.routes");
 const commentsRouter = require("./routes/v1/comment.routes");
 const contanctRouter = require("./routes/v1/contanct.routes");
+const newsletterRouter = require("./routes/v1/newsletter.routes");
+const searchRouter = require("./routes/v1/search.routes");
 
 const app = express();
 app.use("/courses/covers", express.static(path.join(__dirname, "public", "courses", "covers")));
@@ -21,5 +23,7 @@ app.use("/v1/categorie", categorieRouter);
 app.use("/v1/courses", coursesRouter);
 app.use("/v1/comments", commentsRouter);
 app.use("/v1/contacts", contanctRouter);
+app.use("/v1/newsletters", newsletterRouter);
+app.use("/v1/search", searchRouter);
 
 module.exports = app;
