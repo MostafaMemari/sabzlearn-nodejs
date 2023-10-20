@@ -10,6 +10,8 @@ const commentsRouter = require("./routes/v1/comment.routes");
 const contanctRouter = require("./routes/v1/contanct.routes");
 const newsletterRouter = require("./routes/v1/newsletter.routes");
 const searchRouter = require("./routes/v1/search.routes");
+const notificationsRouter = require("./routes/v1/notification.routes");
+const offsRouter = require("./routes/v1/off.routes");
 
 const app = express();
 app.use("/courses/covers", express.static(path.join(__dirname, "public", "courses", "covers")));
@@ -25,5 +27,7 @@ app.use("/v1/comments", commentsRouter);
 app.use("/v1/contacts", contanctRouter);
 app.use("/v1/newsletters", newsletterRouter);
 app.use("/v1/search", searchRouter);
+app.use("/v1/notifications", notificationsRouter);
+app.use("/v1/offs", offsRouter);
 
 module.exports = app;
