@@ -22,7 +22,6 @@ const commentSchema = new mongoose.Schema(
     },
     score: {
       type: Number,
-      default: 5,
     },
     isAnswer: {
       type: Number,

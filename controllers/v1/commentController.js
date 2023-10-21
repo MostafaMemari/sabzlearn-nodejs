@@ -2,7 +2,7 @@ const commentModel = require("../../models/commentModel");
 const courseModel = require("../../models/courseModel");
 
 module.exports.create = async (req, res) => {
-  const { body, courseHref, score } = req.body;
+  const { body, courseHref, score = 5 } = req.body;
 
   const course = await courseModel.findOne({ href: courseHref }).lean();
 
@@ -18,7 +18,7 @@ module.exports.create = async (req, res) => {
   return res.status(200).json(comment);
 };
 module.exports.getAll = async (req, res) => {
-  const comments = await commentModel.find({}).populate("courseID").populate("creator", "-password").lean();
+  const comments = await commentModel.find({}).populate("courseID", "name").populate("creator", "username").lean();
 
   return res.json(comments);
 };
@@ -34,7 +34,6 @@ module.exports.remove = async (req, res) => {
 
   return res.json(deletedComment);
 };
-
 module.exports.remove = async (req, res) => {
   const acceptedComment = await commentModel.findOneAndUpdate(
     {
@@ -71,7 +70,7 @@ module.exports.reject = async (req, res) => {
 };
 
 module.exports.answer = async (req, res) => {
-  const { body } = req.body;
+  const { body, score = 5 } = req.body;
 
   const acceptedComment = await commentModel.findByIdAndUpdate({ _id: req.params.id }, { isAccept: 1 });
 
@@ -88,6 +87,7 @@ module.exports.answer = async (req, res) => {
     isAnswer: 1,
     isAccept: 1,
     mainCommentID: req.params.id,
+    score: req.user.role === "ADMIN" ? "" : score,
   });
 
   return res.status(201).json(answerComment);
