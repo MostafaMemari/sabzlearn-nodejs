@@ -67,7 +67,6 @@ exports.departmentsSubs = async (req, res) => {
 
 exports.setAnswer = async (req, res) => {
   const { body, ticketID } = req.body;
-  console.log("1111", req.body);
 
   const ticket = await ticketsModel.findOne({ _id: ticketID }).lean();
 

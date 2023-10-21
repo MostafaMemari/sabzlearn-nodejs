@@ -14,6 +14,7 @@ const notificationsRouter = require("./routes/v1/notification.routes");
 const offsRouter = require("./routes/v1/off.routes");
 const ordersRouter = require("./routes/v1/order.routes");
 const ticketsRouter = require("./routes/v1/ticket.routes");
+const menusRouter = require("./routes/v1/menu.routes");
 
 const app = express();
 app.use("/courses/covers", express.static(path.join(__dirname, "public", "courses", "covers")));
@@ -33,5 +34,7 @@ app.use("/v1/notifications", notificationsRouter);
 app.use("/v1/offs", offsRouter);
 app.use("/v1/orders", ordersRouter);
 app.use("/v1/tickets", ticketsRouter);
+app.use("/v1/tickets", ticketsRouter);
+app.use("/v1/menus", menusRouter);
 
 module.exports = app;

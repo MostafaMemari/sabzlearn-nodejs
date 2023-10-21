@@ -27,7 +27,7 @@ const schema = mongoose.Schema(
     user: {
       type: mongoose.Types.ObjectId,
       required: true,
-      ref: "User",
+      ref: "user",
     },
     answer: {
       type: Number, // 0 - 1
@@ -36,11 +36,11 @@ const schema = mongoose.Schema(
     course: {
       type: mongoose.Types.ObjectId,
       required: false,
-      ref: "Course",
+      ref: "course",
     },
     parent: {
       type: mongoose.Types.ObjectId,
-      ref: "Ticket",
+      ref: "tiket",
       required: false,
     },
     isAnswer: {
@@ -51,6 +51,6 @@ const schema = mongoose.Schema(
   { timestamps: true }
 );
 
-const model = mongoose.model("Ticket", schema);
+const model = mongoose.model("ticket", schema);
 
 module.exports = model;
