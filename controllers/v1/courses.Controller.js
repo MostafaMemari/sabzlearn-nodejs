@@ -25,7 +25,35 @@ module.exports.create = async (req, res) => {
 
   return res.status(201).json(mainCourse);
 };
+exports.getAll = async (req, res) => {
+  const courses = await courseModel.find({}).populate("categorieID").populate("creator").lean().sort({ _id: -1 });
 
+  const registers = await courseUserModel.find({}).lean();
+  const comments = await commentModel.find({}).lean();
+
+  const allCourses = [];
+
+  courses.forEach((course) => {
+    let courseTotalScore = 5;
+    const courseRegisters = registers.filter((register) => register.courseID.toString() === course._id.toString());
+
+    const courseComments = comments.filter((comment) => {
+      return comment.courseID.toString() === course._id.toString();
+    });
+
+    courseComments.forEach((comment) => (courseTotalScore += Number(comment.score)));
+
+    allCourses.push({
+      ...course,
+      categoryID: course.categorieID.title,
+      creator: course.creator.name,
+      registers: courseRegisters.length,
+      courseAverageScore: Math.floor(courseTotalScore / (courseComments.length + 1)),
+    });
+  });
+
+  return res.json(allCourses);
+};
 module.exports.getOne = async (req, res) => {
   const course = await courseModel.findOne({ href: req.params.href }).populate("creator", "-password").populate("categorieID").lean();
 
